@@ -1,0 +1,144 @@
+using System;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
+using RotinaActivity.Services;
+
+namespace RotinaActivityAgent
+{
+    internal static class Program
+    {
+        private static NotifyIcon _notifyIcon;
+        private static bool _isTrackingPaused = false;
+        private static Win32ActivityTracker _tracker;
+        private static System.Threading.Timer _monitoringTimer;
+
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            // Register Global Exception Handlers
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            {
+                if (e.ExceptionObject is Exception ex)
+                {
+                    LoggerService.LogException(ex, "TrayAgent.UnhandledException", 600);
+                }
+            };
+
+            Application.ThreadException += (s, e) =>
+            {
+                LoggerService.LogException(e.Exception, "TrayAgent.ThreadException", 601);
+            };
+
+            LoggerService.LogInfo("RotinaActivity Tray Agent Executable Started.");
+
+            _tracker = new Win32ActivityTracker();
+            InitializeTrayIcon();
+
+            // Start 2-second background activity monitoring loop
+            _monitoringTimer = new System.Threading.Timer(OnMonitoringTick, null, 1000, 2000);
+
+            Application.Run();
+        }
+
+        private static void InitializeTrayIcon()
+        {
+            try
+            {
+                _notifyIcon = new NotifyIcon();
+                
+                string iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "icon.ico");
+                if (File.Exists(iconPath))
+                {
+                    _notifyIcon.Icon = new Icon(iconPath);
+                }
+                else
+                {
+                    _notifyIcon.Icon = SystemIcons.Application;
+                }
+
+                _notifyIcon.Text = "RotinaActivity Agent - Rastreamento Ativo";
+                _notifyIcon.Visible = true;
+
+                ContextMenuStrip menu = new ContextMenuStrip();
+                menu.Items.Add("RotinaActivity Ultimate (Agente)", null, (s, e) => OpenMainApp());
+                menu.Items.Add(new ToolStripSeparator());
+                
+                var pauseItem = new ToolStripMenuItem("Pausar Rastreamento", null, (s, e) => TogglePauseTracking());
+                menu.Items.Add(pauseItem);
+
+                menu.Items.Add("Ativar Modo Focus", null, (s, e) => ShowNotification("Modo Focus", "Sessão de Deep Work iniciada!"));
+                menu.Items.Add("Abrir Dashboard", null, (s, e) => OpenMainApp());
+                menu.Items.Add(new ToolStripSeparator());
+                menu.Items.Add("Sair", null, (s, e) => ExitAgent());
+
+                _notifyIcon.ContextMenuStrip = menu;
+                _notifyIcon.DoubleClick += (s, e) => OpenMainApp();
+            }
+            catch (Exception ex)
+            {
+                LoggerService.LogException(ex, "TrayAgent.InitializeTrayIcon", 602);
+            }
+        }
+
+        private static void OnMonitoringTick(object state)
+        {
+            if (_isTrackingPaused) return;
+
+            try
+            {
+                var (appName, windowTitle, path) = _tracker.GetActiveWindowDetails();
+                uint idleSecs = _tracker.GetIdleTimeSeconds();
+
+                // Telemetry active event captured silently
+            }
+            catch (Exception ex)
+            {
+                LoggerService.LogException(ex, "TrayAgent.OnMonitoringTick", 603);
+            }
+        }
+
+        private static void TogglePauseTracking()
+        {
+            _isTrackingPaused = !_isTrackingPaused;
+            string status = _isTrackingPaused ? "Pausado" : "Ativo";
+            _notifyIcon.Text = $"RotinaActivity Agent - {status}";
+            ShowNotification("Status de Monitorização", $"Rastreamento de atividade está agora {status.ToLower()}.");
+        }
+
+        private static void OpenMainApp()
+        {
+            try
+            {
+                string mainExe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RotinaActivity.exe");
+                if (File.Exists(mainExe))
+                {
+                    Process.Start(new ProcessStartInfo(mainExe) { UseShellExecute = true });
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerService.LogException(ex, "TrayAgent.OpenMainApp", 604);
+            }
+        }
+
+        private static void ShowNotification(string title, string text)
+        {
+            _notifyIcon.ShowBalloonTip(3000, title, text, ToolTipIcon.Info);
+        }
+
+        private static void ExitAgent()
+        {
+            _monitoringTimer?.Dispose();
+            _notifyIcon.Visible = false;
+            _notifyIcon.Dispose();
+            LoggerService.LogInfo("RotinaActivity Tray Agent Shutdown cleanly.");
+            Application.Exit();
+        }
+    }
+}

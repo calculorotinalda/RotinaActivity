@@ -1,0 +1,42 @@
+# Visual Studio / .NET / C#
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+.vs/
+[Bb]in/
+[Ob]j/
+[Ll]og/
+[Ll]ogs/
+*.cache
+*.pdb
+*.log
+
+# Build Outputs & Installer Artifacts
+Output/
+publish_portable/
+dist_ui/
+build.txt
+log.txt
+*.db
+*.sqlite
+*.sqlite-journal
+rotina_activity.db
+
+# Node / Web (React + Vite)
+node_modules/
+dist/
+.env.local
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS Generated & IDE Files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+*.swp
+*.tmp

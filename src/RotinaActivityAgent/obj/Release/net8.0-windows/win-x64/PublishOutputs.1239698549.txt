@@ -1,0 +1,2 @@
+C:\Users\alll\Documents\RotinaActivity\src\RotinaActivityAgent\bin\Release\net8.0-windows\win-x64\publish\RotinaActivityAgent.pdb
+C:\Users\alll\Documents\RotinaActivity\src\RotinaActivityAgent\bin\Release\net8.0-windows\win-x64\publish\RotinaActivityAgent.exe

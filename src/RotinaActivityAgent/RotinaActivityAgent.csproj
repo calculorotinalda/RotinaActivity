@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <AssemblyName>RotinaActivityAgent</AssemblyName>
+    <RootNamespace>RotinaActivityAgent</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\icon.ico" Link="icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\RotinaActivity\Services\LoggerService.cs" Link="Services\LoggerService.cs" />
+    <Compile Include="..\RotinaActivity\Services\Win32ActivityTracker.cs" Link="Services\Win32ActivityTracker.cs" />
+  </ItemGroup>
+
+</Project>
