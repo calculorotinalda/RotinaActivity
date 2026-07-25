@@ -7,6 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dist_ui/assets/index-dbdz4mkz.css")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dist_ui/assets/index-m1sn3bnh.js")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dist_ui/index.html")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("webview2loader.dll")]
 
 

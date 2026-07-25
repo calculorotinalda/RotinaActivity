@@ -1,12 +1,17 @@
 import React from 'react';
 import { SystemMetrics } from '../types';
-import { Cpu, HardDrive, Wifi, Battery, Monitor, Zap, Activity } from 'lucide-react';
+import { Cpu, HardDrive, Wifi, Battery, Monitor, Activity } from 'lucide-react';
 
 interface SystemMonitorProps {
-  metrics: SystemMetrics;
+  metrics?: SystemMetrics;
 }
 
 export const SystemMonitor: React.FC<SystemMonitorProps> = ({ metrics }) => {
+  const cpuPercent = typeof metrics?.cpuPercent === 'number' ? metrics.cpuPercent : 0;
+  const ramUsageMb = typeof metrics?.ramUsageMb === 'number' ? metrics.ramUsageMb : 0;
+  const batteryPercent = typeof metrics?.batteryPercent === 'number' ? metrics.batteryPercent : 100;
+  const networkKbps = typeof metrics?.networkKbps === 'number' ? metrics.networkKbps : 0;
+
   return (
     <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-3.5rem)]">
       {/* Header */}
@@ -35,11 +40,11 @@ export const SystemMonitor: React.FC<SystemMonitorProps> = ({ metrics }) => {
               <Cpu className="w-4 h-4 text-indigo-400" />
               <span>Utilização de CPU</span>
             </span>
-            <span className="font-mono text-indigo-400">{metrics.cpuPercent}%</span>
+            <span className="font-mono text-indigo-400">{cpuPercent}%</span>
           </div>
-          <div className="text-3xl font-extrabold text-white font-mono">{metrics.cpuPercent.toFixed(1)}%</div>
+          <div className="text-3xl font-extrabold text-white font-mono">{cpuPercent.toFixed(1)}%</div>
           <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-            <div className="bg-indigo-500 h-full rounded-full" style={{ width: `${Math.min(100, metrics.cpuPercent * 10)}%` }}></div>
+            <div className="bg-indigo-500 h-full rounded-full" style={{ width: `${Math.min(100, cpuPercent * 10)}%` }}></div>
           </div>
           <p className="text-[11px] text-slate-400">Excelente eficiência do agente background</p>
         </div>
@@ -53,7 +58,7 @@ export const SystemMonitor: React.FC<SystemMonitorProps> = ({ metrics }) => {
             </span>
             <span className="font-mono text-emerald-400">&lt; 100 MB Target</span>
           </div>
-          <div className="text-3xl font-extrabold text-white font-mono">{metrics.ramUsageMb.toFixed(1)} MB</div>
+          <div className="text-3xl font-extrabold text-white font-mono">{ramUsageMb.toFixed(1)} MB</div>
           <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
             <div className="bg-emerald-500 h-full rounded-full" style={{ width: '42%' }}></div>
           </div>
@@ -67,11 +72,11 @@ export const SystemMonitor: React.FC<SystemMonitorProps> = ({ metrics }) => {
               <Battery className="w-4 h-4 text-amber-400" />
               <span>Bateria & Energia</span>
             </span>
-            <span className="font-mono text-amber-400">{metrics.batteryPercent}%</span>
+            <span className="font-mono text-amber-400">{batteryPercent}%</span>
           </div>
-          <div className="text-3xl font-extrabold text-white font-mono">{metrics.batteryPercent}%</div>
+          <div className="text-3xl font-extrabold text-white font-mono">{batteryPercent}%</div>
           <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-            <div className="bg-amber-500 h-full rounded-full" style={{ width: `${metrics.batteryPercent}%` }}></div>
+            <div className="bg-amber-500 h-full rounded-full" style={{ width: `${batteryPercent}%` }}></div>
           </div>
           <p className="text-[11px] text-slate-400">Modo de Alta Eficiência Ativo</p>
         </div>
@@ -84,7 +89,7 @@ export const SystemMonitor: React.FC<SystemMonitorProps> = ({ metrics }) => {
             <Wifi className="w-4 h-4 text-purple-400" />
             <span>Tráfego Local & Sincronização</span>
           </div>
-          <p className="text-xs text-slate-300">Largura de banda de telemetria local: <span className="font-mono text-indigo-400">{metrics.networkKbps} KB/s</span></p>
+          <p className="text-xs text-slate-300">Largura de banda de telemetria local: <span className="font-mono text-indigo-400">{networkKbps} KB/s</span></p>
         </div>
 
         <div className="glass-panel p-5 rounded-xl border border-slate-800 bg-slate-900/50 space-y-2">

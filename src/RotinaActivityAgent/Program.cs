@@ -13,6 +13,7 @@ namespace RotinaActivityAgent
         private static NotifyIcon _notifyIcon;
         private static bool _isTrackingPaused = false;
         private static Win32ActivityTracker _tracker;
+        private static DatabaseService _dbService;
         private static System.Threading.Timer _monitoringTimer;
 
         [STAThread]
@@ -37,10 +38,11 @@ namespace RotinaActivityAgent
 
             LoggerService.LogInfo("RotinaActivity Tray Agent Executable Started.");
 
+            _dbService = new DatabaseService();
             _tracker = new Win32ActivityTracker();
             InitializeTrayIcon();
 
-            // Start 2-second background activity monitoring loop
+            // Start 2-second background activity monitoring loop logging directly to SQLite WAL DB
             _monitoringTimer = new System.Threading.Timer(OnMonitoringTick, null, 1000, 2000);
 
             Application.Run();
@@ -95,7 +97,48 @@ namespace RotinaActivityAgent
                 var (appName, windowTitle, path) = _tracker.GetActiveWindowDetails();
                 uint idleSecs = _tracker.GetIdleTimeSeconds();
 
-                // Telemetry active event captured silently
+                if (string.IsNullOrWhiteSpace(appName)) return;
+
+                string appLower = appName.ToLower();
+
+                // Ignore RotinaActivity self-logging so only external windows opened by the user are tracked
+                if (appLower.Contains("rotinaactivity")) return;
+
+                string category = "Geral";
+                bool isProductive = true;
+
+                if (appLower.Contains("code") || appLower.Contains("visualstudio") || appLower.Contains("devenv") || appLower.Contains("rider") || appLower.Contains("git") || appLower.Contains("cmd") || appLower.Contains("powershell") || appLower.Contains("terminal"))
+                {
+                    category = "Desenvolvimento";
+                    isProductive = true;
+                }
+                else if (appLower.Contains("chrome") || appLower.Contains("msedge") || appLower.Contains("firefox") || appLower.Contains("brave"))
+                {
+                    category = "Navegador";
+                    isProductive = true;
+                }
+                else if (appLower.Contains("figma") || appLower.Contains("photoshop") || appLower.Contains("illustrator"))
+                {
+                    category = "Design";
+                    isProductive = true;
+                }
+                else if (appLower.Contains("slack") || appLower.Contains("teams") || appLower.Contains("discord") || appLower.Contains("whatsapp"))
+                {
+                    category = "Comunicação";
+                    isProductive = true;
+                }
+                else if (appLower.Contains("word") || appLower.Contains("excel") || appLower.Contains("obsidian") || appLower.Contains("notepad"))
+                {
+                    category = "Documentação";
+                    isProductive = true;
+                }
+                else if (appLower.Contains("spotify") || appLower.Contains("steam") || appLower.Contains("netflix") || appLower.Contains("game"))
+                {
+                    category = "Entretenimento";
+                    isProductive = false;
+                }
+
+                _dbService?.AddActivity(appName, windowTitle, category, 2, (int)idleSecs, isProductive);
             }
             catch (Exception ex)
             {

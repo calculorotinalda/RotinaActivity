@@ -25,20 +25,35 @@ export const App: React.FC = () => {
 
   // States
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [score, setScore] = useState<ProductivityScore>({ score: 88, focusScore: 92, consistencyScore: 85, contextSwitches: 14, interruptionCount: 3, workRestRatio: '82% / 18%' });
+  const [score, setScore] = useState<ProductivityScore>({ score: 0, focusScore: 0, consistencyScore: 0, contextSwitches: 0, interruptionCount: 0, workRestRatio: '0% / 0%' });
   const [goals, setGoals] = useState<Goal[]>([]);
   const [automationRules, setAutomationRules] = useState<AutomationRule[]>([]);
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
-  const [metrics, setMetrics] = useState<SystemMetrics>({ cpuPercent: 1.8, ramUsageMb: 86.4, ramTotalMb: 16384, gpuPercent: 4.2, diskPercent: 28.5, networkKbps: 124.5, batteryPercent: 98 });
+  const [metrics, setMetrics] = useState<SystemMetrics>({ cpuPercent: 0, ramUsageMb: 0, ramTotalMb: 16384, gpuPercent: 0, diskPercent: 0, networkKbps: 0, batteryPercent: 100 });
+
+  // Toggle Dark/Light class on html document root
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
 
   useEffect(() => {
-    // Load initial data
-    ApiService.getActivities().then(setActivities);
-    ApiService.getScore().then(setScore);
-    ApiService.getGoals().then(setGoals);
-    ApiService.getAutomationRules().then(setAutomationRules);
-    ApiService.getAIInsights().then(setAiInsights);
-    ApiService.getSystemMetrics().then(setMetrics);
+    const fetchProductionData = () => {
+      ApiService.getActivities().then(setActivities);
+      ApiService.getScore().then(setScore);
+      ApiService.getGoals().then(setGoals);
+      ApiService.getAutomationRules().then(setAutomationRules);
+      ApiService.getAIInsights().then(setAiInsights);
+      ApiService.getSystemMetrics().then(setMetrics);
+    };
+
+    fetchProductionData();
+    // Poll API every 3s to capture real-time production activities recorded by background C# agent
+    const interval = setInterval(fetchProductionData, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleCommandPaletteSelect = (actionId: string) => {
@@ -51,7 +66,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className={`h-screen w-screen flex flex-col overflow-hidden ${isDarkMode ? 'dark' : ''}`}>
+    <div className={`h-screen w-screen flex flex-col overflow-hidden transition-colors ${isDarkMode ? 'dark bg-[#0B0F17] text-gray-100' : 'bg-slate-50 text-slate-900'}`}>
       {/* Top Navbar Header */}
       <Navbar
         onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
@@ -65,7 +80,7 @@ export const App: React.FC = () => {
       <div className="flex-1 flex overflow-hidden">
         <Sidebar activeTab={activeTab} onSelectTab={setActiveTab} />
 
-        <main className="flex-1 bg-[#0B0F17] overflow-hidden">
+        <main className={`flex-1 overflow-hidden transition-colors ${isDarkMode ? 'bg-[#0B0F17]' : 'bg-slate-100'}`}>
           {activeTab === 'dashboard' && <Dashboard score={score} activities={activities} />}
           {activeTab === 'timeline' && <ForensicTimeline activities={activities} />}
           {activeTab === 'ai-coach' && <AICoach insights={aiInsights} />}
@@ -78,7 +93,7 @@ export const App: React.FC = () => {
           {activeTab === 'heatmaps' && <HeatmapViewer />}
           {activeTab === 'reports' && <ReportsExporter />}
           {activeTab === 'settings' && <SettingsCenter />}
-          {activeTab === 'diagnostics' && <DiagnosticsCenter />}
+          {activeTab === 'diagnostics' && <DiagnosticsCenter activities={activities} />}
         </main>
       </div>
 

@@ -493,3 +493,7 @@ C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\obj\Release\net8.0-win
 C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\obj\Release\net8.0-windows\win-x64\RotinaActivity.pdb
 C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\obj\Release\net8.0-windows\win-x64\RotinaActivity.genruntimeconfig.cache
 C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\obj\Release\net8.0-windows\win-x64\ref\RotinaActivity.dll
+C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\obj\Release\net8.0-windows\win-x64\RotinaActivity.sourcelink.json
+C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\bin\Release\net8.0-windows\win-x64\dist_ui\index.html
+C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\bin\Release\net8.0-windows\win-x64\dist_ui\assets\index-DBdz4MKZ.css
+C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\bin\Release\net8.0-windows\win-x64\dist_ui\assets\index-M1sn3BNH.js

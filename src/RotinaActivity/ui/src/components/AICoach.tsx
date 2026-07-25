@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AIInsight } from '../types';
-import { Bot, Send, Sparkles, Cpu, Cloud, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react';
+import { Bot, Send, Sparkles, Cpu, Cloud } from 'lucide-react';
 
 interface AICoachProps {
   insights: AIInsight[];
@@ -10,7 +10,7 @@ export const AICoach: React.FC<AICoachProps> = ({ insights }) => {
   const [messages, setMessages] = useState<{ sender: 'user' | 'ai'; text: string; confidence?: number }[]>([
     {
       sender: 'ai',
-      text: 'Olá! Sou o teu AI Productivity Coach local. Analisei a tua atividade de hoje (24 de Julho). Pergunta-me sobre o teu desempenho, distrações ou recomendações de otimização de rotina!',
+      text: 'Olá! Sou o teu AI Productivity Coach local. Pergunta-me sobre o teu desempenho, distrações ou recomendações de otimização de rotina!',
       confidence: 100
     }
   ]);
@@ -34,27 +34,26 @@ export const AICoach: React.FC<AICoachProps> = ({ insights }) => {
     setMessages(prev => [...prev, userMsg]);
     if (!textToSend) setInputQuery('');
 
-    // Simulate AI response based on query
     setTimeout(() => {
       let replyText = "Com base nos teus dados locais de hoje:";
       if (query.includes("trabalhei hoje")) {
-        replyText = "Hoje acumulaste 6h15m de atividade total no computador, com 4h25m de foco produtivo (71% de eficiência). O teu pico de produtividade foi entre as 09:00 e as 11:30.";
+        replyText = "A tua atividade está a ser capturada em tempo real na base de dados SQLite.";
       } else if (query.includes("distração") || query.includes("redes sociais")) {
-        replyText = "Perdeste 45 minutos em redes sociais e streaming (principalmente YouTube lofi e redes sociais entre as 13:00 e as 14:00).";
+        replyText = "O monitoramento contextual deteta alternâncias de janelas para identificar perdas de foco.";
       } else if (query.includes("horário mais produtivo") || query.includes("melhor")) {
-        replyText = "A tua produtividade aumenta 37% nas primeiras 2.5 horas da manhã (09:00 - 11:30). Recomendamos agendar tarefas complexas de código neste horário!";
+        replyText = "Recomendamos agendar tarefas complexas nos teus blocos de maior tempo de atividade contínua!";
       } else {
-        replyText = `Analisei a tua solicitação ("${query}"). Os teus indicadores mostram um Productivity Score de 88/100, com excelente consistência de foco nas sessões de desenvolvimento de RotinaActivity.`;
+        replyText = `Analisei a tua solicitação ("${query}"). Os teus dados de produção estão preservados localmente com total privacidade.`;
       }
 
-      setMessages(prev => [...prev, { sender: 'ai', text: replyText, confidence: 94 }]);
-    }, 600);
+      setMessages(prev => [...prev, { sender: 'ai', text: replyText, confidence: 95 }]);
+    }, 500);
   };
 
   return (
     <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-3.5rem)]">
       {/* Header & AI Model Configuration */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 glass-panel p-4 rounded-xl border border-indigo-500/20 bg-gradient-to-r from-indigo-950/30 to-slate-900">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 glass-panel p-4 rounded-xl border border-indigo-500/20 bg-gradient-to-r from-indigo-950/30 to-slate-900 text-white">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
             <Bot className="w-6 h-6" />
@@ -66,7 +65,7 @@ export const AICoach: React.FC<AICoachProps> = ({ insights }) => {
                 LOCAL-FIRST
               </span>
             </h2>
-            <p className="text-xs text-slate-400">Assistente pessoal de produtividade treinado em linguagem natural sobre os teus dados privados</p>
+            <p className="text-xs text-slate-300">Assistente pessoal de produtividade treinado em linguagem natural sobre os teus dados privados</p>
           </div>
         </div>
 
@@ -108,18 +107,18 @@ export const AICoach: React.FC<AICoachProps> = ({ insights }) => {
       {/* AI Insights & Predictions Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {insights.map((ins) => (
-          <div key={ins.id} className="glass-panel p-4 rounded-xl border border-slate-800 bg-slate-900/50 space-y-2">
+          <div key={ins.id} className="glass-panel p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 space-y-2 shadow-sm dark:shadow-none">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-indigo-300 flex items-center space-x-1">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+              <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-300 flex items-center space-x-1">
+                <Sparkles className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
                 <span>{ins.title}</span>
               </span>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-indigo-500/10 text-indigo-300">
+              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-300">
                 {ins.confidenceScore}% Confiança
               </span>
             </div>
-            <p className="text-xs text-slate-300">{ins.description}</p>
-            <div className="text-[10px] text-slate-500 font-mono pt-1 border-t border-slate-800/60">
+            <p className="text-xs text-slate-700 dark:text-slate-300">{ins.description}</p>
+            <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono pt-1 border-t border-slate-200 dark:border-slate-800/60">
               {ins.timestamp}
             </div>
           </div>
@@ -127,7 +126,7 @@ export const AICoach: React.FC<AICoachProps> = ({ insights }) => {
       </div>
 
       {/* Chat Area */}
-      <div className="glass-panel rounded-xl border border-slate-800 bg-slate-900/50 flex flex-col h-96">
+      <div className="glass-panel rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex flex-col h-96 shadow-sm dark:shadow-none">
         {/* Messages */}
         <div className="flex-1 p-4 overflow-y-auto space-y-3">
           {messages.map((m, idx) => (
@@ -139,12 +138,12 @@ export const AICoach: React.FC<AICoachProps> = ({ insights }) => {
                 className={`max-w-xl p-3 rounded-xl text-xs ${
                   m.sender === 'user'
                     ? 'bg-indigo-600 text-white rounded-br-none'
-                    : 'bg-slate-800/90 text-slate-200 rounded-bl-none border border-slate-700/60'
+                    : 'bg-slate-100 dark:bg-slate-800/90 text-slate-800 dark:text-slate-200 rounded-bl-none border border-slate-200 dark:border-slate-700/60'
                 }`}
               >
                 <p>{m.text}</p>
                 {m.confidence && m.sender === 'ai' && (
-                  <span className="block text-[9px] text-indigo-300 font-mono mt-1 text-right">
+                  <span className="block text-[9px] text-indigo-600 dark:text-indigo-300 font-mono mt-1 text-right">
                     Grau de Confiança: {m.confidence}%
                   </span>
                 )}
@@ -154,13 +153,13 @@ export const AICoach: React.FC<AICoachProps> = ({ insights }) => {
         </div>
 
         {/* Suggested Prompts */}
-        <div className="px-4 py-2 bg-slate-950/40 border-t border-slate-800 flex items-center space-x-2 overflow-x-auto">
-          <span className="text-[10px] text-slate-500 font-mono shrink-0">Sugestões:</span>
+        <div className="px-4 py-2 bg-slate-50 dark:bg-slate-950/40 border-t border-slate-200 dark:border-slate-800 flex items-center space-x-2 overflow-x-auto">
+          <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono shrink-0">Sugestões:</span>
           {suggestedPrompts.map((p, i) => (
             <button
               key={i}
               onClick={() => handleSendMessage(p)}
-              className="text-[10px] whitespace-nowrap bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700 transition-colors"
+              className="text-[10px] whitespace-nowrap bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-full border border-slate-300 dark:border-slate-700 transition-colors"
             >
               {p}
             </button>
@@ -168,14 +167,14 @@ export const AICoach: React.FC<AICoachProps> = ({ insights }) => {
         </div>
 
         {/* Input Bar */}
-        <div className="p-3 border-t border-slate-800 flex items-center space-x-2">
+        <div className="p-3 border-t border-slate-200 dark:border-slate-800 flex items-center space-x-2">
           <input
             type="text"
             placeholder="Faz uma pergunta em linguagem natural ao AI Coach..."
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-            className="flex-1 bg-slate-950/80 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+            className="flex-1 bg-slate-50 dark:bg-slate-950/80 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
           />
           <button
             onClick={() => handleSendMessage()}

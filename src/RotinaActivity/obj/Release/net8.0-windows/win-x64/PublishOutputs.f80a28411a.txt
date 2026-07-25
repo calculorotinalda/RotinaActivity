@@ -1,4 +1,6 @@
 C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\bin\Release\net8.0-windows\win-x64\publish\RotinaActivity.pdb
+C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\bin\Release\net8.0-windows\win-x64\publish\dist_ui\assets\index-DBdz4MKZ.css
+C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\bin\Release\net8.0-windows\win-x64\publish\dist_ui\index.html
 C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Web.WebView2.Core.xml
 C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Web.WebView2.Wpf.xml
 C:\Users\alll\Documents\RotinaActivity\src\RotinaActivity\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Web.WebView2.WinForms.xml

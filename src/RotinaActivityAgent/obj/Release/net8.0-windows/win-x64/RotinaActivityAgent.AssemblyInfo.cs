@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RotinaActivityAgent")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+719090a450de57a7d44a861df1b9e910cff487b9")]
 [assembly: System.Reflection.AssemblyProductAttribute("RotinaActivityAgent")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RotinaActivityAgent")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

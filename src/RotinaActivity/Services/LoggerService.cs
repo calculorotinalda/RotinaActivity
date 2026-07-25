@@ -7,10 +7,16 @@ namespace RotinaActivity.Services
     public static class LoggerService
     {
         private static readonly object _lockObj = new object();
-        private static readonly string _logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log.txt");
+        private static readonly string _logFilePath;
 
         static LoggerService()
         {
+            string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RotinaActivity");
+            if (!Directory.Exists(appDataFolder))
+            {
+                Directory.CreateDirectory(appDataFolder);
+            }
+            _logFilePath = Path.Combine(appDataFolder, "log.txt");
             InitializeLog();
         }
 
